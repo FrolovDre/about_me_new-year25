@@ -3,8 +3,8 @@ export const profile = {
   role: 'Product Manager / Project Manager',
   summary: [
     'Выпускник МГУ, магистратура НИУ ВШЭ (бизнес-информатика / цифровые инновации).',
-    'Интерес: продукт + аналитика + AI. Опыт в Agile и end-to-end цикле продукта.',
-    'Ищу стажировку / Junior Product, full-time, Москва.'
+    'Интерес: продукт + аналитика + AI.',
+    'Опыт в Agile и end-to-end цикле продукта.'
   ],
   location: 'Москва',
   email: '<<EMAIL>>',

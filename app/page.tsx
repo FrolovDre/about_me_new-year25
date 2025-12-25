@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Icon from '../components/Icon';
 import PortfolioPanel from '../components/PortfolioPanel';
 import { profile } from '../data/profile';
 
@@ -8,7 +9,6 @@ export default function HomePage() {
       <div className="mx-auto flex min-h-screen max-w-6xl flex-col gap-10 px-6 py-14 lg:flex-row lg:items-start lg:gap-12">
         <section className="relative flex w-full flex-col items-start gap-6 lg:w-1/2">
           <div className="relative">
-            <span className="bell" aria-hidden="true">🔔</span>
             <Image
               src="/profile.jpg"
               alt="Фото профиля"
@@ -43,11 +43,11 @@ export default function HomePage() {
           </div>
           <div className="flex flex-col gap-3 text-white/80">
             <div className="flex items-center gap-2">
-              <span aria-hidden="true">📍</span>
+              <Icon name="pin" className="icon-soft" />
               <span>{profile.location}</span>
             </div>
             <div className="flex items-center gap-2">
-              <span aria-hidden="true">✉️</span>
+              <Icon name="mail" className="icon-soft" />
               <a
                 href={`mailto:${profile.email}`}
                 className="link-highlight"
@@ -56,13 +56,13 @@ export default function HomePage() {
               </a>
             </div>
             <div className="flex items-center gap-2">
-              <span aria-hidden="true">☎️</span>
+              <Icon name="phone" className="icon-soft" />
               <a href={`tel:${profile.phone}`} className="link-highlight">
                 {profile.phone}
               </a>
             </div>
             <div className="flex items-center gap-2">
-              <span aria-hidden="true">🌐</span>
+              <Icon name="globe" className="icon-soft" />
               <a
                 href={profile.website}
                 className="link-highlight"

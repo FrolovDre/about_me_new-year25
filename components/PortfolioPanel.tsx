@@ -2,13 +2,14 @@
 
 import { useState } from 'react';
 import { profile } from '../data/profile';
+import Icon from './Icon';
 
 const tabs = [
-  { id: 'projects', label: 'Проекты', icon: '🎁' },
-  { id: 'experience', label: 'Опыт', icon: '⭐' },
-  { id: 'skills', label: 'Навыки', icon: '❄️' },
-  { id: 'education', label: 'Образование', icon: '🎓' },
-  { id: 'contact', label: 'Контакты', icon: '🎄' }
+  { id: 'projects', label: 'Проекты', icon: 'sparkles' },
+  { id: 'experience', label: 'Опыт', icon: 'briefcase' },
+  { id: 'skills', label: 'Навыки', icon: 'layers' },
+  { id: 'education', label: 'Образование', icon: 'graduation' },
+  { id: 'contact', label: 'Контакты', icon: 'chat' }
 ] as const;
 
 type TabId = (typeof tabs)[number]['id'];
@@ -27,7 +28,7 @@ export default function PortfolioPanel() {
             className={`tab ${activeTab === tab.id ? 'tab-active' : ''}`}
             data-snow="true"
           >
-            <span aria-hidden="true">{tab.icon}</span>
+            <Icon name={tab.icon} className="icon-soft" />
             {tab.label}
           </button>
         ))}
@@ -43,7 +44,7 @@ export default function PortfolioPanel() {
                 data-snow="true"
               >
                 <div className="flex items-center gap-2 text-lg font-semibold">
-                  <span aria-hidden="true">🎁</span>
+                  <Icon name="sparkles" className="icon-soft icon-lg" />
                   {project.title}
                 </div>
                 <p className="text-white/70">{project.description}</p>
@@ -76,7 +77,7 @@ export default function PortfolioPanel() {
                 data-snow="true"
               >
                 <div className="flex items-center gap-2 text-lg font-semibold">
-                  <span aria-hidden="true">⭐</span>
+                  <Icon name="briefcase" className="icon-soft icon-lg" />
                   {job.role}
                 </div>
                 <p className="text-white/70">
@@ -144,7 +145,7 @@ export default function PortfolioPanel() {
             {profile.education.map((item) => (
               <article key={item.title} className="panel-card" data-snow="true">
                 <div className="flex items-center gap-2 text-lg font-semibold">
-                  <span aria-hidden="true">🎓</span>
+                  <Icon name="graduation" className="icon-soft icon-lg" />
                   {item.title}
                 </div>
                 <p className="text-white/70">{item.detail}</p>

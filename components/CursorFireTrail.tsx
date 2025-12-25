@@ -8,7 +8,7 @@ type Point = {
   life: number;
 };
 
-const MAX_POINTS = 32;
+const MAX_POINTS = 60;
 const MELT_DISTANCE = 180;
 const MELT_TIME = 1200;
 const WET_TIME = 3200;
@@ -22,7 +22,10 @@ export default function CursorFireTrail() {
 
   useEffect(() => {
     const isFinePointer = window.matchMedia('(pointer: fine)').matches;
-    if (!isFinePointer) return;
+    const prefersReducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches;
+    if (!isFinePointer || prefersReducedMotion || navigator.webdriver) return;
 
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -100,40 +103,55 @@ export default function CursorFireTrail() {
         context.globalCompositeOperation = 'lighter';
         pointsRef.current.forEach((point, index) => {
           const life = Math.max(point.life, 0);
-          const size = 18 + index * 0.9;
-          const inner = size * 0.35;
-          const outer = size * 1.8;
-          const gradient = context.createRadialGradient(
-            point.x,
-            point.y,
+          const size = 28 + index * 1.15;
+          const inner = size * 0.3;
+          const outer = size * 3;
+          const rise = 14 * life;
+          const drift = ((index % 5) - 2) * 2;
+          const flameX = point.x + drift;
+          const flameY = point.y - rise;
+          const flameGradient = context.createRadialGradient(
+            flameX,
+            flameY,
             inner,
-            point.x,
-            point.y,
+            flameX,
+            flameY,
             outer
           );
-          gradient.addColorStop(0, `rgba(255, 220, 170, ${0.9 * life})`);
-          gradient.addColorStop(0.35, `rgba(255, 150, 90, ${0.65 * life})`);
-          gradient.addColorStop(0.7, `rgba(255, 90, 40, ${0.35 * life})`);
-          gradient.addColorStop(1, 'rgba(255, 60, 20, 0)');
-          context.fillStyle = gradient;
+          flameGradient.addColorStop(0, `rgba(255, 245, 230, ${0.95 * life})`);
+          flameGradient.addColorStop(0.25, `rgba(255, 205, 150, ${0.85 * life})`);
+          flameGradient.addColorStop(0.55, `rgba(255, 145, 90, ${0.6 * life})`);
+          flameGradient.addColorStop(0.8, `rgba(255, 100, 55, ${0.35 * life})`);
+          flameGradient.addColorStop(1, 'rgba(255, 70, 30, 0)');
+          context.save();
+          context.translate(flameX, flameY);
+          context.scale(1.1, 1.6);
+          context.fillStyle = flameGradient;
           context.beginPath();
-          context.arc(point.x, point.y, outer, 0, Math.PI * 2);
+          context.arc(0, 0, outer, 0, Math.PI * 2);
           context.fill();
+          context.restore();
 
-          const emberGradient = context.createRadialGradient(
+          const coreY = point.y - rise * 0.65;
+          const coreGradient = context.createRadialGradient(
             point.x,
-            point.y,
+            coreY,
             0,
             point.x,
-            point.y,
-            size * 0.7
+            coreY,
+            size
           );
-          emberGradient.addColorStop(0, `rgba(255, 255, 255, ${0.3 * life})`);
-          emberGradient.addColorStop(1, 'rgba(255, 120, 80, 0)');
-          context.fillStyle = emberGradient;
+          coreGradient.addColorStop(0, `rgba(255, 255, 255, ${0.55 * life})`);
+          coreGradient.addColorStop(0.65, `rgba(255, 200, 130, ${0.35 * life})`);
+          coreGradient.addColorStop(1, 'rgba(255, 130, 90, 0)');
+          context.save();
+          context.translate(point.x, coreY);
+          context.scale(1, 1.2);
+          context.fillStyle = coreGradient;
           context.beginPath();
-          context.arc(point.x, point.y, size * 0.7, 0, Math.PI * 2);
+          context.arc(0, 0, size, 0, Math.PI * 2);
           context.fill();
+          context.restore();
 
           point.life -= 0.035;
         });
