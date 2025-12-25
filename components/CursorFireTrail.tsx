@@ -8,7 +8,7 @@ type Point = {
   life: number;
 };
 
-const MAX_POINTS = 32;
+const MAX_POINTS = 48;
 const MELT_DISTANCE = 180;
 const MELT_TIME = 1200;
 const WET_TIME = 3200;
@@ -100,39 +100,43 @@ export default function CursorFireTrail() {
         context.globalCompositeOperation = 'lighter';
         pointsRef.current.forEach((point, index) => {
           const life = Math.max(point.life, 0);
-          const size = 18 + index * 0.9;
-          const inner = size * 0.35;
-          const outer = size * 1.8;
-          const gradient = context.createRadialGradient(
-            point.x,
-            point.y,
+          const size = 26 + index * 1.1;
+          const inner = size * 0.28;
+          const outer = size * 2.6;
+          const rise = 14 * life;
+          const drift = ((index % 5) - 2) * 2;
+          const flameGradient = context.createRadialGradient(
+            point.x + drift,
+            point.y - rise,
             inner,
-            point.x,
-            point.y,
+            point.x + drift,
+            point.y - rise,
             outer
           );
-          gradient.addColorStop(0, `rgba(255, 220, 170, ${0.9 * life})`);
-          gradient.addColorStop(0.35, `rgba(255, 150, 90, ${0.65 * life})`);
-          gradient.addColorStop(0.7, `rgba(255, 90, 40, ${0.35 * life})`);
-          gradient.addColorStop(1, 'rgba(255, 60, 20, 0)');
-          context.fillStyle = gradient;
+          flameGradient.addColorStop(0, `rgba(255, 245, 220, ${0.95 * life})`);
+          flameGradient.addColorStop(0.25, `rgba(255, 200, 140, ${0.8 * life})`);
+          flameGradient.addColorStop(0.5, `rgba(255, 140, 80, ${0.6 * life})`);
+          flameGradient.addColorStop(0.8, `rgba(255, 90, 40, ${0.3 * life})`);
+          flameGradient.addColorStop(1, 'rgba(255, 60, 20, 0)');
+          context.fillStyle = flameGradient;
           context.beginPath();
-          context.arc(point.x, point.y, outer, 0, Math.PI * 2);
+          context.arc(point.x + drift, point.y - rise, outer, 0, Math.PI * 2);
           context.fill();
 
-          const emberGradient = context.createRadialGradient(
+          const coreGradient = context.createRadialGradient(
             point.x,
-            point.y,
+            point.y - rise * 0.6,
             0,
             point.x,
-            point.y,
-            size * 0.7
+            point.y - rise * 0.6,
+            size * 0.9
           );
-          emberGradient.addColorStop(0, `rgba(255, 255, 255, ${0.3 * life})`);
-          emberGradient.addColorStop(1, 'rgba(255, 120, 80, 0)');
-          context.fillStyle = emberGradient;
+          coreGradient.addColorStop(0, `rgba(255, 255, 255, ${0.5 * life})`);
+          coreGradient.addColorStop(0.6, `rgba(255, 190, 120, ${0.35 * life})`);
+          coreGradient.addColorStop(1, 'rgba(255, 120, 80, 0)');
+          context.fillStyle = coreGradient;
           context.beginPath();
-          context.arc(point.x, point.y, size * 0.7, 0, Math.PI * 2);
+          context.arc(point.x, point.y - rise * 0.6, size * 0.9, 0, Math.PI * 2);
           context.fill();
 
           point.life -= 0.035;
